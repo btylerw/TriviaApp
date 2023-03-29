@@ -7,13 +7,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import Questions from "./Questions";
 import HomeScreen from "./HomeScreen";
 
-const TRIVIA_QUESTION = "What is the capital of France?";
 const Stack = createStackNavigator();
 
-
-
 const App = () => {
-  global.test = false;
   return (
     <NavigationContainer>
     <Stack.Navigator>
