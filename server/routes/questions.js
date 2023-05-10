@@ -1,20 +1,24 @@
 const router = require('express').Router();
-const User = require('../models/questions');
+const QuestionModel = require('../models/questions');
 
-router.get('/questions/:Question', async (req, res) => {
-  try {
-    const username = req.params.username;
-    const user = await User.findOne({ username: username });
-    if (user) {
-      console.log(user);
-      res.status(200).json(user);
-    } else {
-      res.status(404).json('User not found');
+router.get("/getQuestions", async (req, res) => {
+    try {
+      const allQuestions = await QuestionModel.find({});
+      res.send({allQuestions})
+    } catch (err) {
+      console.log(err);    
     }
-  } catch (error) {
-    res.status(500).json('Error: ' + error);
-  }
 });
 
+router.post("/newQuestions", async (req, res) => {
+    const { Question, correctAns, incorrectAns1, incorrectAns2, incorrectAns3, Category } = req.body;
+    try {
+      const newQuestion = new QuestionModel({ Question, correctAns, incorrectAns1, incorrectAns2, incorrectAns3, Category });
+      await newQuestion.save();
+      res.status(201).json('Question registered successfully');
+    } catch (error) {
+      res.status(400).json('Error: ' + error);
+    }
+  });
 
 module.exports = router;

@@ -1,8 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const mongoURL = 'mongodb+srv://admin:XVyy4SqW2Ow73Ioo@triviaapp.xftlph2.mongodb.net/Users?retryWrites=true&w=majority';
+const dotenv = require('dotenv');
+//const mongoose = require('mongoose');
+//const mongoURL = 'mongodb+srv://admin:XVyy4SqW2Ow73Ioo@triviaapp.xftlph2.mongodb.net/Users?retryWrites=true&w=majority';
+
+const connectUsersDB = require('./config/db');
+
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -12,11 +17,15 @@ app.use(bodyParser.json());
 
 // Import routes
 const usersRouter = require('./routes/users');
+const questionsRouter = require('./routes/questions');
+const { connect } = require('mongoose');
 
 // Use routes
 app.use('/users', usersRouter);
+app.use('/questions', questionsRouter);
 
 // Connect to MongoDB
+/*
 mongoose.connect(mongoURL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -26,19 +35,9 @@ const connection = mongoose.connection;
 connection.once('open', () => {
   console.log('MongoDB connection established successfully');
 });
+*/
 
-require("./models/questions");
-const Questions = mongoose.model("Questions");
-
-// Gets all question data from database
-app.get("/getQuestions", async (req, res) => {
-  try {
-    const allQuestions = await Questions.find({});
-    res.send({allQuestions})
-  } catch (err) {
-    console.log(err);    
-  }
-})
+connectUsersDB();
 
 // Start server
 app.listen(port, () => {

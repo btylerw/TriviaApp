@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const User = require('../models/user');
+const Score = require('../models/score')
 
 router.post('/signup', async (req, res) => {
   const { username, email, password } = req.body;
@@ -7,6 +8,8 @@ router.post('/signup', async (req, res) => {
   try {
     const newUser = new User({ username, email, password });
     await newUser.save();
+    const userScore = new Score({username, score:0});
+    await userScore.save();
     res.status(201).json('User registered successfully');
   } catch (error) {
     res.status(400).json('Error: ' + error);
@@ -27,6 +30,5 @@ router.get('/user/:username', async (req, res) => {
     res.status(500).json('Error: ' + error);
   }
 });
-
 
 module.exports = router;

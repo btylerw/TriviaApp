@@ -1,13 +1,18 @@
-import React, { createContext, useContext, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Button } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { EventRegister } from 'react-native-event-listeners';
+import { SafeAreaView, StyleSheet, Text, View, Button, Appearance } from 'react-native';
+import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SignUpForm from './SignUpForm';
 import LogInForm from './LogInForm';
 import HomeScreen from './HomeScreen';
 import Questions from './Questions';
+import CreateQuestion from './CreateQuestion';
+import OnlineQuestions from './OnlineQuestion';
+import themeContext from './styles/themeContext';
 import { UserContext } from './UserContext';
+import { DefaultTheme } from 'react-native-paper';
 
 
 // Our global authentication state, with default values
@@ -20,17 +25,10 @@ export const AuthContext = createContext({
 //   setChoice: () => {},
 // });
 
-const SignUpScreen = () => {
-  
 
+const SignUpScreen = () => {
   return (
-    <SafeAreaView style={styles.container}>
     <SignUpForm />
-    <Button
-    title="Press"
-    onPress = {() => null}
-    />
-  </SafeAreaView>
   );
 };
 
@@ -69,6 +67,8 @@ const LoggedInNavigator = () => {
 };
 
 
+
+
 const Stack = createStackNavigator();
 
 export const AppNavigator = () => {
@@ -81,25 +81,40 @@ export const AppNavigator = () => {
         :
         <>
       
-      <Stack.Screen name="Log In" component={LogInScreen} />
+      <Stack.Screen name="Login" component={LogInScreen} />
       <Stack.Screen name="Sign Up" component={SignUpScreen} />
       </>
     }
     <Stack.Screen name="Questions" component={Questions} />
+    <Stack.Screen name="Create Question" component={CreateQuestion} />
+    <Stack.Screen name="Online Question" component={OnlineQuestions} />
     </Stack.Navigator>
   );
 };
-
 
 
 const screens = () => {
   // This is linked to our global authentication state.
   // We connect this in React to re-render components when changing this value.
   const [hasUser, setUser] = useState(false);
-  
+  const [mode, setMode] = useState(false);
+
+  useEffect(() => {
+    let eventListener = EventRegister.addEventListener(
+      "changeTheme",
+      (data) => {
+        setMode(data);
+        console.log(data);
+      }
+    );
+    return () => {
+      EventRegister.removeEventListener(eventListener);
+    };
+  });
+
   return (
     <AuthContext.Provider value={{ hasUser, setUser }}>
-        <NavigationContainer>
+        <NavigationContainer theme={mode === true ? DarkTheme : DefaultTheme}>
           <AppNavigator />
         </NavigationContainer>
     </AuthContext.Provider>
