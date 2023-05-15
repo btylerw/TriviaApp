@@ -13,6 +13,7 @@ import OnlineQuestions from './OnlineQuestion';
 import themeContext from './styles/themeContext';
 import { UserContext } from './UserContext';
 import { DefaultTheme } from 'react-native-paper';
+import Leaderboard from './Leaderboard';
 
 
 // Our global authentication state, with default values
@@ -70,7 +71,7 @@ const LoggedInNavigator = () => {
 
 
 const Stack = createStackNavigator();
-
+// Defines available screens
 export const AppNavigator = () => {
   const { hasUser } = useContext(AuthContext);
   return (
@@ -88,6 +89,8 @@ export const AppNavigator = () => {
     <Stack.Screen name="Questions" component={Questions} />
     <Stack.Screen name="Create Question" component={CreateQuestion} />
     <Stack.Screen name="Online Question" component={OnlineQuestions} />
+    <Stack.Screen name="Leaderboard" component={Leaderboard}/>
+    <Stack.Screen name="Log In" component={LogInScreen}/>
     </Stack.Navigator>
   );
 };
@@ -113,6 +116,7 @@ const screens = () => {
   });
 
   return (
+    // Entire app is wrapped with theme context to switch between dark mode and light mode
     <AuthContext.Provider value={{ hasUser, setUser }}>
         <NavigationContainer theme={mode === true ? DarkTheme : DefaultTheme}>
           <AppNavigator />

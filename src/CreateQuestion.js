@@ -14,12 +14,14 @@ export default function CreateQuestion({navigation}) {
     const [incorrectAns1, setincorrAns1] = useState('');
     const [incorrectAns2, setincorrAns2] = useState('');
     const [incorrectAns3, setincorrAns3] = useState('');
+    // Sets variables for available categroeis
     const data = [
         {key:'Science', value:'Science'},
         {key:'Geography', value:'Geography'},
         {key:'Math', value:'Math'},
     ]
 
+    // Sends question data to backend API to be saved to database
     const sendQuestion = async (Question, correctAns, incorrectAns1, incorrectAns2, incorrectAns3, Category) => {
         try {
             const response = await axios.post('http://127.0.0.1:3000/questions/newQuestions', {
@@ -38,9 +40,10 @@ export default function CreateQuestion({navigation}) {
         }
 
     }
+    
     return (
         <SafeAreaView style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.background}}>
-        <SelectList
+        <SelectList /* Dropdown list to select category */
             boxStyles={{width: 300}}
             inputStyles={{color: theme.color, fontSize: 18}}
             dropdownTextStyles={{color: theme.color, fontSize: 18}}

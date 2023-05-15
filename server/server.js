@@ -24,19 +24,7 @@ const { connect } = require('mongoose');
 app.use('/users', usersRouter);
 app.use('/questions', questionsRouter);
 
-// Connect to MongoDB
-/*
-mongoose.connect(mongoURL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-const connection = mongoose.connection;
-connection.once('open', () => {
-  console.log('MongoDB connection established successfully');
-});
-*/
-
+// Connect to database
 connectUsersDB();
 
 // Start server

@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const QuestionModel = require('../models/questions');
 
+// Uses question schema to get all questions from database
 router.get("/getQuestions", async (req, res) => {
     try {
       const allQuestions = await QuestionModel.find({});
@@ -10,6 +11,7 @@ router.get("/getQuestions", async (req, res) => {
     }
 });
 
+// Uses question schema to create a new question in database
 router.post("/newQuestions", async (req, res) => {
     const { Question, correctAns, incorrectAns1, incorrectAns2, incorrectAns3, Category } = req.body;
     try {

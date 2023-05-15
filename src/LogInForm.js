@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Button, TextInput, Title, HelperText, Text} from 'react-native-paper';
 import axios from 'axios';
-import { TouchableOpacity, StyleSheet, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, View} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -12,8 +13,19 @@ function LogInForm ({onLogin}) {
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const navigation = useNavigation();
-  console.log(process.env.MONGO_DB_URL);
 
+  // Saves currently logged in username in 'username' key with AsyncStorage
+  const saveUser = async () => {
+    try {
+      await AsyncStorage.setItem('username', username);
+      console.log('Data saved successfully');
+      verifyUser(username);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // Verifies login credentials
   const verifyUser = async (username)  => {
     try {
       const response = await axios.get(`http://127.0.0.1:3000/users/user/${username}`);
@@ -35,8 +47,8 @@ function LogInForm ({onLogin}) {
   };
 
   return (
-    <View>
-      <Title style={{paddingLeft: 38, fontSize: 24, fontWeight: 'bold'}}>Login</Title>
+    <View style={styles.container}>
+      <Title style={{fontSize: 24, fontWeight: 'bold'}}>Login</Title>
       <View style={styles.container}>
       <TextInput
         style={styles.input}
@@ -59,11 +71,11 @@ function LogInForm ({onLogin}) {
       />
       {passwordError && <HelperText type="error">Incorrect password</HelperText>}
 
-      <TouchableOpacity style={styles.button} onPress={() => verifyUser(username)}>
+      <TouchableOpacity style={styles.button} onPress={saveUser}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
       </View>
-      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+      <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
       <Text style={{paddingRight: 5, fontSize: 20}}>Need an account?</Text>
       <TouchableOpacity onPress={handleSignUp} style={{}}>
         <Text style={{fontSize: 20, color: 'blue'}}>Sign Up</Text>

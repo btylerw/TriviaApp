@@ -42,6 +42,7 @@ const SignUpForm = () => {
     setConfPassword(text);
   };
 
+  // If correct syntax is used and password is confirmed, creates user
   const handleSignUp = async (username, email, password) => {
     if (!confpwdError) {
     try {
@@ -129,7 +130,7 @@ const SignUpForm = () => {
         onChangeText={checkpwd}
         secureTextEntry
       />
-      <HelperText type="error" visible={confpwdError}>
+      <HelperText type="error" visible={confpwdError} /* Ensures passwords match before creating user*/ >
         Passwords do not match.
       </HelperText>
 
