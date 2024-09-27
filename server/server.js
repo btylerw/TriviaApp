@@ -3,7 +3,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 //const mongoose = require('mongoose');
-//const mongoURL = 'mongodb+srv://admin:XVyy4SqW2Ow73Ioo@triviaapp.xftlph2.mongodb.net/Users?retryWrites=true&w=majority';
 
 const connectUsersDB = require('./config/db');
 
